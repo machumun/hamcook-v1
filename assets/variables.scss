@@ -1,0 +1,82 @@
+// a {
+//     &:hover {
+//       filter: brightness(0.9);
+//     }
+//     // &:active {
+//     //   filter: brightness(0.9);
+//     // }
+//     div {
+//       filter: brightness(0.9);
+//     }
+//   }
+
+$main-pink: #ffafaf;
+$sub-pink: #ff9999;
+$ham-beige: #ffebcc;
+$sub-beige: #fbffe2;
+$main-blue: #a3e3e5;
+$main-gray: #e6ebdb;
+$sub-gray: #9e9790;
+$sub-gray-light: #cac1b8;
+
+/*------------ ptov ------------*/
+@function v($size, $viewport: 750) {
+  $rate: 100 / $viewport;
+  @return decimal-round($rate * $size * 1vw);
+}
+
+/*------------ 四捨五入 ------------*/
+@function decimal-round($number, $digits: 2, $mode: round) {
+  $n: 1;
+  @if type-of($number) != number {
+    @warn '#{ $number } is not a number.';
+    @return $number;
+  }
+  @if type-of($digits) != number {
+    @warn '#{ $digits } is not a number.';
+    @return $number;
+  } @else if not unitless($digits) {
+    @warn '#{ $digits } has a unit.';
+    @return $number;
+  }
+  @if $digits > 0 {
+    @for $i from 1 through $digits {
+      $n: $n * 10;
+    }
+  }
+  @if $mode == round {
+    @return round($number * $n) / $n;
+  } @else if $mode == ceil {
+    @return ceil($number * $n) / $n;
+  } @else if $mode == floor {
+    @return floor($number * $n) / $n;
+  } @else {
+    @warn '#{ $mode } is undefined keyword.';
+    @return $number;
+  }
+}
+
+@mixin lineHeightCrop($line-height) {
+  &::before {
+    display: block;
+    width: 0;
+    height: 0;
+    margin-top: calc((1 - #{$line-height}) * 0.5em);
+    content: "";
+  }
+  &::after {
+    display: block;
+    // background-color: red;
+    width: 100%;
+    height: calc((#{$line-height} - 1) * 0.5em);
+    content: "";
+  }
+}
+
+.void {
+  font-size: 0px;
+}
+
+/* nuxt-link:hover {
+    filter: brightness(1.2) !important;
+  } */
